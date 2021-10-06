@@ -1,6 +1,6 @@
 <script lang="ts">
   import WallboxConfig from './lib/WallboxConfig.svelte'
-  import ConnectButton from './lib/ConnectButton.svelte'
+  import WallboxSimulator from './lib/wallbox-simulator/WallboxSimulator.svelte'
 
   let webSocketUrl: string;
 </script>
@@ -11,7 +11,7 @@
     <WallboxConfig bind:connectionUrl={webSocketUrl} />
   </p>
   <p>
-    <ConnectButton bind:connectionUrl={webSocketUrl}/>
+    <WallboxSimulator bind:webSocketUrl={webSocketUrl} />
   </p>
 </main>
 

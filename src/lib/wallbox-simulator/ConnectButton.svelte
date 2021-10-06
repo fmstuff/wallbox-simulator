@@ -1,8 +1,24 @@
 <script lang="ts">
+  import { connectStation, disconnectStation } from './websocket';
+
   export let connectionUrl: string = 'not provided';
+  export let webSocket: WebSocket;
 
   let connectionState: 'disconnected' | 'connecting' | 'connected' | 'error' = 'disconnected';
   let buttonText: string;
+  let errorMessage: string;
+
+  const setConnectionState = (connected: boolean) => {
+    connected ? connectionState = 'connected' : connectionState = 'disconnected';
+  }
+
+  const setErrorMessage = (message: string) => {
+    errorMessage = message;
+  }
+
+  const addLogMessage = (message: string) =>  {
+    console.log(message);
+  }
 
   $: {
     switch (connectionState) {
@@ -23,11 +39,15 @@
   const connect = () => {
     if (connectionState === 'disconnected') {
       connectionState = 'connecting';
-      alert(`Connecting to: ${connectionUrl}`)
-    } else if (connectionState === 'connecting') {
-      connectionState = 'connected';
-    } else {
-      connectionState = 'disconnected';
+      webSocket = connectStation(
+        webSocket,
+        connectionUrl,
+        setConnectionState,
+        setErrorMessage,
+        addLogMessage
+      );
+    } else if (connectionState === 'connected') {
+      webSocket = disconnectStation(webSocket, setConnectionState);
     }
   }
 </script>
