@@ -1,7 +1,18 @@
 {
   "name": "wallbox-simulator",
-  "version": "0.0.0",
+  "version": "0.0.1",
+  "license": "MIT",
+  "description": "OCPP wallbox simulator implemented as Svelte webapp.",
+  "author": "Felix Manke (https://github.com/fmstuff)",
+  "contributors": [],
+  "bugs": "https://github.com/fmstuff/wallbox-simulator/issues",
+  "homepage": "https://github.com/fmstuff/wallbox-simulator",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:fmstuff/wallbox-simulator.git"
+  },
   "type": "module",
+  "private": true,
   "scripts": {
     "dev": "vite",
     "build": "vite build",
