@@ -1,37 +1,24 @@
-export function BootNotification(websocket) {
-  if (!websocket || !websocket.send) {
-    console.warn(
-      "No websocket connection found for sending BootNotification... aborting."
-    );
-    return;
-  }
+import { OcppCallMessageBuilder } from "./ocppMessage";
 
-  var BN = JSON.stringify([
-    2,
-    randomMessageId(),
-    "BootNotification",
-    {
-      chargingStation: {
-        serialNumber: "SOME-serial-NUMBER-123",
-        model: "MGWB Fake",
-        vendorName: "Unicorn GmbH",
-        firmwareVersion: "1.2.3",
-      },
-      reason: "PowerUp",
-    },
-  ]);
+export const BootNotification =
+  OcppCallMessageBuilder<BootNotificationPayload>("BootNotification");
 
-  console.log("Sending BootNotification.");
-  websocket.send(BN);
-  console.log("BootNotification sent!");
-}
+export type BootNotificationPayload = {
+  chargingStation: {
+    serialNumber: string;
+    model: string;
+    vendorName: string;
+    firmwareVersion: string;
+  };
+  reason: string;
+};
 
-function randomMessageId() {
-  const allowedChars =
-    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-  let id = "";
-  for (var i = 0; i < 36; i++) {
-    id += allowedChars.charAt(Math.floor(Math.random() * allowedChars.length));
-  }
-  return id;
-}
+export const defaultBootNotificationPayload: BootNotificationPayload = {
+  chargingStation: {
+    serialNumber: "SOME-serial-NUMBER-123",
+    model: "MGWB Fake",
+    vendorName: "Unicorn GmbH",
+    firmwareVersion: "1.2.3",
+  },
+  reason: "PowerUp",
+};

@@ -3,8 +3,8 @@
 
   export let connectionUrl: string = 'not provided';
   export let webSocket: WebSocket;
-
-  let connectionState: 'disconnected' | 'connecting' | 'connected' | 'error' = 'disconnected';
+  export let connectionState: 'disconnected' | 'connecting' | 'connected' | 'error' = 'disconnected';
+  
   let buttonText: string;
   let errorMessage: string;
 

@@ -1,4 +1,7 @@
-import { BootNotification } from "./ocpp-messages/bootNotification";
+import {
+  BootNotification,
+  defaultBootNotificationPayload,
+} from "./ocpp-messages/bootNotification";
 
 export function disconnectStation(websocket, setConnectionState) {
   if (websocket) {
@@ -33,8 +36,7 @@ export function connectStation(
       source: "CS simulator",
       payload: "Websocket connection opened successfully!",
     });
-    sessionStorage.setItem("LastAction", "BootNotification");
-    BootNotification(websocket);
+    BootNotification(websocket, defaultBootNotificationPayload);
   };
 
   websocket.onerror = function (errorEvent) {
