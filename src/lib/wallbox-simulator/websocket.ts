@@ -1,7 +1,7 @@
 import {
   BootNotification,
   defaultBootNotificationPayload,
-} from "./ocpp-messages/bootNotification";
+} from "./ocpp/messages/bootNotification";
 
 export function disconnectStation(websocket, setConnectionState) {
   if (websocket) {
