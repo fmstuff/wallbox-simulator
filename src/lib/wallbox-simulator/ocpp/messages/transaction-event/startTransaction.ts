@@ -1,8 +1,10 @@
+import type { ChargingStateEnumType } from "../../types/chargingStateEnumType";
+import type { TriggerReasonEnumType } from "../../types/triggerReasonEnumType";
 import { ReadingContextEnumType } from "../meterValue";
 
 export function StartTransactionEventPayload(
-  triggerReason = "CablePluggedIn",
-  chargingState = "EVDetected"
+  triggerReason: TriggerReasonEnumType = "CablePluggedIn",
+  chargingState: ChargingStateEnumType = "EVDetected"
 ) {
   const transactionStartTime = new Date().toISOString();
   sessionStorage.setItem("TransactionStartTime", transactionStartTime);

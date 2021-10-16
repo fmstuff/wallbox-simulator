@@ -6,17 +6,14 @@
   let webSocketUrl: string;
 </script>
 
-<main class="container mx-auto text-center p-4">
-  <Heading1>Wallbox Simulator</Heading1>    
+<main class="container mx-auto max-w-screen-sm p-4 text-center">
+  <Heading1>Wallbox Simulator</Heading1>
 
-  <p class="p-4">
+  <div class="py-4">
     <WallboxConfig bind:connectionUrl={webSocketUrl} />
-  </p>
+  </div>
 
-  <p class="p-4">
-    <WallboxSimulator bind:webSocketUrl={webSocketUrl} />
-  </p>
-
+  <WallboxSimulator bind:webSocketUrl={webSocketUrl} />
 </main>
 
 <style global lang="postcss">

@@ -1,10 +1,14 @@
 <script lang="ts">
-  import { StartTransactionEventPayload } from "./ocpp-messages/transaction-event/startTransaction";
-  import { StopTransactionEventPayload } from "./ocpp-messages/transaction-event/stopTransaction";
-  import { TransactionEvent } from "./ocpp-messages/transaction-event/transactionEvent";
+  import type { Writable } from "svelte/store";
+
+  import Button from "../components/Button.svelte";
+  import { chargingState, ConnectionState } from "./store";
+  import { StartTransactionEventPayload } from "./ocpp/messages/transaction-event/startTransaction";
+  import { StopTransactionEventPayload } from "./ocpp/messages/transaction-event/stopTransaction";
+  import { TransactionEvent } from "./ocpp/messages/transaction-event/transactionEvent";
 
   export let webSocket: WebSocket;
-  export let connectionState;
+  export let connectionState: Writable<ConnectionState>;
 
   let cableState: 'pluggedOut' | 'pluggedIn' = 'pluggedOut';
   let buttonText: string;
@@ -26,44 +30,24 @@
 
   const plugCableInOrOut = () => {
     if (cableState === 'pluggedOut') {
-      TransactionEvent(webSocket, StartTransactionEventPayload());
+      const payload = StartTransactionEventPayload();
+      TransactionEvent(webSocket, payload);
+      $chargingState = payload.transactionData.chargingState;
       setCableState(true);
     } else if (cableState === 'pluggedIn') {
       const sessionId = sessionStorage.getItem("OcppTransactionId"); // todo: handle this with Svelte state
       console.log(`Stopping session with ID: ${sessionId}`)
       TransactionEvent(webSocket, StopTransactionEventPayload(sessionId));
+      $chargingState = undefined;
       setCableState(false);
     }
   }
 </script>
 
-{#if connectionState === 'connected'}
-<button on:click={plugCableInOrOut}>
+{#if $connectionState === 'connected'}
+<Button on:click={plugCableInOrOut}>
   {buttonText}
-</button>
+</Button>
 {/if}
 
-
-<style>
-  button {
-    font-family: inherit;
-    font-size: inherit;
-    padding: 1em 2em;
-    color: #6633cc;
-    background-color: #eee7f9;
-    border-radius: 2em;
-    border: 2px solid rgba(255, 62, 0, 0);
-    outline: none;
-    width: 200px;
-    font-variant-numeric: tabular-nums;
-    cursor: pointer;
-  }
-
-  button:focus {
-    border: 2px solid #6633cc;
-  }
-
-  button:active {
-    background-color: #d2c3ef;
-  }
-</style>
+<style></style>

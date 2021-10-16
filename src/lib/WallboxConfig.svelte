@@ -1,23 +1,15 @@
 <script lang="ts">
-  export let connectionUrl = 'wss://connection/string...'
+  import Input from './components/Input.svelte';
+
+  export let connectionUrl = localStorage.getItem('connectionString') ?? 'wss://connection/string...'
+  
+  $: {
+    // save the connection string to local storage whenever it changes
+    // to make it "survive" page refreshs
+    localStorage.setItem('connectionString', connectionUrl);
+  }
 </script>
 
-<input id="url" bind:value={connectionUrl}>
+<Input bind:value={connectionUrl} />
 
-<style>
-  input {
-    width: 50%;
-    font-family: inherit;
-    font-size: inherit;
-    padding: 1em 2em;
-    color: #6633cc;
-    background-color: #eee7f9;
-    border-radius: 2em;
-    border: 2px solid #eee7f9;
-    outline: none;
-  }
-
-  input:focus {
-    border: 2px solid #6633cc;
-  }
-</style>
+<style></style>
