@@ -8,7 +8,7 @@ The idea is to support eMobility charging application developers by allowing the
 the most common scenarios that happen during a typical charging session.  
 
 
-The simulator is built with with [Svelte](https://svelte.dev/) and [TypeScript](https://www.typescriptlang.org/) using [Vite](https://vitejs.dev/).
+The simulator is built with with [Svelte](https://svelte.dev/) and [TypeScript](https://www.typescriptlang.org/) using [Vite](https://vitejs.dev/) and [tailwindcss](https://tailwindcss.com/).
 
 ## Recommended IDE Setup
 
