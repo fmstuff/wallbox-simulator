@@ -2,6 +2,7 @@
   import type { Writable } from 'svelte/store';
   
   import Button from '../components/Button.svelte';
+import { startHeartbeat, stopHeartbeat } from './heatbeatTrigger';
   import type { ConnectionState } from './store';
   import { connectStation, disconnectStation } from './websocket';
 
@@ -50,8 +51,10 @@
         setErrorMessage,
         addLogMessage
       );
+      startHeartbeat(webSocket);
     } else if ($connectionState === 'connected') {
       webSocket = disconnectStation(webSocket, setConnectionState);
+      stopHeartbeat();
     }
   }
 </script>

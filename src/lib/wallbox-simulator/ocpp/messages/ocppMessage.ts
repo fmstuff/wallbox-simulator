@@ -1,4 +1,5 @@
 import { v4 as uuidv4 } from "uuid";
+import { resetHeartbeatTimer } from "../../heatbeatTrigger";
 
 /**
  * Specifies the nature of any OCPP message. To identify the type of message one
@@ -12,9 +13,12 @@ export enum OcppMessageType {
 
 /**
  * List of OCCP actions implemented & supported by the simulator.
- *
  */
-const ocppActions = ["BootNotification", "TransactionEvent"] as const;
+const ocppActions = [
+  "BootNotification",
+  "Heartbeat",
+  "TransactionEvent",
+] as const;
 export type OcppAction = typeof ocppActions[number];
 
 /**
@@ -72,8 +76,11 @@ export function OcppCallMessageBuilder<PayloadType>(
     ]);
 
     console.log(`Sending ${ocppActionType}.`);
+
+    resetHeartbeatTimer(websocket);
     websocket.send(ocppMessage);
     sessionStorage.setItem("LastAction", ocppActionType);
+
     console.log(`${ocppActionType} sent!`);
   };
 }
