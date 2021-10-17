@@ -1,19 +1,15 @@
+import type { BootNotificationRequestType } from "../types/bootNotificationRequestType";
 import { OcppCallMessageBuilder } from "./ocppMessage";
 
+/**
+ * ### 1.2. BootNotification
+ *
+ * Sent by the wallbox to the CSMS after booting.
+ */
 export const BootNotification =
-  OcppCallMessageBuilder<BootNotificationPayload>("BootNotification");
+  OcppCallMessageBuilder<BootNotificationRequestType>("BootNotification");
 
-export type BootNotificationPayload = {
-  chargingStation: {
-    serialNumber: string;
-    model: string;
-    vendorName: string;
-    firmwareVersion: string;
-  };
-  reason: string;
-};
-
-export const defaultBootNotificationPayload: BootNotificationPayload = {
+export const defaultBootNotificationPayload: BootNotificationRequestType = {
   chargingStation: {
     serialNumber: "SOME-serial-NUMBER-123",
     model: "MGWB Fake",
