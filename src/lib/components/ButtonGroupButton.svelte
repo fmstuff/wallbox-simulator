@@ -1,18 +1,15 @@
 <script lang="ts">
-  export const classes: string = "";
+  export let classes: string = "";
 </script>
 
 <button on:click class="
-  btn btn-primary
-  w-full
-  my-4
+  btn btn-sm
   text-indigo-600
   bg-purple-100
-  hover:bg-purple-200
+  hover:bg-purple-300
   active:bg-purple-300
   rounded-full
   outline-none
-  focus:ring-2
   focus:ring-indigo-600
   active:ring-offset-2
   active:ring-4

@@ -1,8 +1,9 @@
+import type { TriggerReasonEnumType } from "../../types/triggerReasonEnumType";
 import { ReadingContextEnumType } from "../meterValue";
 
 export function StopTransactionEventPayload(
   transactionId,
-  triggerReason = "EVCommunicationLost"
+  triggerReason: TriggerReasonEnumType = "EVCommunicationLost"
 ) {
   const lastMeterValueFromSessionStorage =
     sessionStorage.getItem("LastMeterValue");
@@ -19,10 +20,6 @@ export function StopTransactionEventPayload(
     timestamp: new Date().toISOString(),
     triggerReason,
     seqNo: 0,
-    idToken: {
-      idToken: "TAG1",
-      type: "Central",
-    },
     evse: {
       id: 1,
       connectorId: 1,
