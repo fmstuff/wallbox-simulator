@@ -6,7 +6,7 @@ import { OcppCallMessageBuilder } from "./ocppMessage";
  *
  * Sent by the wallbox to the CSMS after booting.
  */
-export const BootNotification =
+export const sendBootNotificationRequest =
   OcppCallMessageBuilder<BootNotificationRequestType>("BootNotification");
 
 export const defaultBootNotificationPayload: BootNotificationRequestType = {

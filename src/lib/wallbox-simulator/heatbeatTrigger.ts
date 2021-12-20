@@ -1,4 +1,4 @@
-import { HeartbeatRequest } from "./ocpp/messages/heartBeat";
+import { sendHeartbeatRequest } from "./ocpp/messages/heartBeat";
 
 const DEFAULT_INTERVAL_SECONDS = 300;
 
@@ -52,5 +52,5 @@ export function stopHeartbeat() {
  * Sends an OCPP heartbeat message.
  */
 function sendHeartbeatMessage(websocket: WebSocket) {
-  HeartbeatRequest(websocket, {});
+  sendHeartbeatRequest(websocket, {});
 }

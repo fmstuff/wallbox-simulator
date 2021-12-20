@@ -1,3 +1,8 @@
+import type { TransactionEventRequest } from "../../types/transactionEventRequest";
 import { OcppCallMessageBuilder } from "../ocppMessage";
 
-export const TransactionEvent = OcppCallMessageBuilder("TransactionEvent");
+/**
+ * Sends a TransactionEvent request to the CSMS backend.
+ */
+export const sendTransactionEventRequest =
+  OcppCallMessageBuilder<TransactionEventRequest>("TransactionEvent");

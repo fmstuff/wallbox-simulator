@@ -1,3 +1,4 @@
+import { AppLogger } from "../../../logger/logger";
 import { v4 as uuidv4 } from "uuid";
 import { resetHeartbeatTimer } from "../../heatbeatTrigger";
 
@@ -18,6 +19,8 @@ const ocppActions = [
   "BootNotification",
   "Heartbeat",
   "TransactionEvent",
+  "GetVariables",
+  "RequestStopTransaction",
 ] as const;
 export type OcppAction = typeof ocppActions[number];
 
@@ -33,6 +36,76 @@ export type OcppAction = typeof ocppActions[number];
  *
  */
 export type OcppMessageId = string;
+
+/**
+ * A CALL always consists of 4 elements:
+ * The standard elements MessageTypeId and MessageId, a specific Action that is
+ * required on the other side and a payload, the arguments to the Action.
+ *
+ * The syntax of a CALL looks like this:
+ * `[<MessageTypeId>, "<MessageId>", "<Action>", {<Payload>}`
+ */
+export interface OcppCall {
+  /**
+   * This is a Message Type Number which is used to identify the type of the
+   * message.
+   * */
+  messageTypeId: OcppMessageType.CALL;
+
+  /**
+   * This is a unique identifier that will be used to match request and result.
+   */
+  messageId: OcppMessageId;
+
+  /**
+   * The name of the remote procedure or action. This field SHALL contain a
+   * case-sensitive string.
+   * The field SHALL contain the OCPP Message name without the "Request" suffix.
+   *
+   * For example:
+   * For a "BootNotificationRequest", this field shall be set to "BootNotification".
+   */
+  action: OcppAction;
+
+  /**
+   * JSON compatible payload of the action.
+   */
+  payload: object;
+}
+
+/**
+ * If the call can be handled correctly the result will be a regular CALLRESULT.
+ * Error situations that are covered by the definition of the OCPP response
+ * definition are not considered errors in this context.
+ *
+ * They are regular results and as such will be treated as a normal CALLRESULT,
+ * even if the result is undesirable for the recipient.
+ *
+ * A CALLRESULT always consists of 3 elements:
+ * The standard elements MessageTypeId and MessageId and a payload, containing
+ * the response to the Action in the original Call.
+ *
+ * The syntax of a CALLRESULT looks like this:
+ * `[<MessageTypeId>, "<MessageId>", {<Payload>}]`
+ */
+export interface OcppCallResult {
+  /**
+   * This is a Message Type Number which is used to identify the type of the
+   * message.
+   */
+  messageTypeId: OcppMessageType.CALLRESULT;
+
+  /**
+   * This must be the exact same ID that is in the call request so that the
+   * recipient can match request and result.
+   */
+  messageId: OcppMessageId;
+
+  /**
+   * JSON compatible payload of the action.
+   */
+  payload: object;
+}
 
 /**
  * Generate a random OCPP message ID.
@@ -62,26 +135,26 @@ export function OcppCallMessageBuilder<PayloadType>(
     messageId = generateOcppMessageId()
   ) => {
     if (!websocket || !websocket.send) {
-      console.warn(
+      AppLogger.warn(
+        "Wallbox Simulator",
         `No websocket connection found for sending ${ocppActionType}... aborting.`
       );
       return;
     }
 
-    const ocppMessage = JSON.stringify([
+    const ocppMessage = [
       OcppMessageType.CALL,
       messageId,
       ocppActionType,
       payload,
-    ]);
+    ];
 
-    console.log(`Sending ${ocppActionType}.`);
+    AppLogger.log("Wallbox Simulator", `Sending ${ocppActionType}.`);
 
     resetHeartbeatTimer(websocket);
-    websocket.send(ocppMessage);
-    sessionStorage.setItem("LastAction", ocppActionType);
+    websocket.send(JSON.stringify(ocppMessage));
 
-    console.log(`${ocppActionType} sent!`);
+    AppLogger.log("Wallbox Simulator", `${ocppActionType} sent!`, ocppMessage);
   };
 }
 

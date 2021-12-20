@@ -1,12 +1,13 @@
+import { AppLogger } from "../logger/logger";
+import { CpoOcppMessageHandler } from "./cpo-message-handler/cpo-message-handler";
 import {
-  BootNotification,
+  sendBootNotificationRequest,
   defaultBootNotificationPayload,
 } from "./ocpp/messages/bootNotification";
 
-export function disconnectStation(websocket, setConnectionState) {
+export function disconnectStation(websocket: WebSocket) {
   if (websocket) {
     websocket.close(3001);
-    setConnectionState(false);
     console.log("Disconnected!");
   } else {
     console.log("Can't disconnect - no websocket connection found...");
@@ -15,14 +16,10 @@ export function disconnectStation(websocket, setConnectionState) {
 }
 
 export function connectStation(
-  websocket,
-  connectionString,
-  setConnectionState,
-  setErrorMessage,
-  addLogMessage
+  websocket: WebSocket,
+  connectionString: string,
+  setConnectionState: (isConnected: boolean) => void
 ) {
-  setErrorMessage("");
-
   if (websocket) {
     websocket.close(3001);
     setConnectionState(false);
@@ -32,34 +29,31 @@ export function connectStation(
   websocket.onopen = function (authorizationData) {
     setConnectionState(true);
 
-    addLogMessage({
-      source: "CS simulator",
-      payload: "Websocket connection opened successfully!",
-    });
-    BootNotification(websocket, defaultBootNotificationPayload);
+    AppLogger.log(
+      "Wallbox Simulator",
+      "Websocket connection opened successfully!"
+    );
+    sendBootNotificationRequest(websocket, defaultBootNotificationPayload);
   };
 
   websocket.onerror = function (errorEvent) {
-    if (errorEvent.target.readyState === 3) {
-      setErrorMessage("The connection was closed or could not be established.");
-      addLogMessage({
-        source: "CS simulator",
-        payload: "The connection was closed or could not be established.",
-      });
-    }
+    AppLogger.log("Wallbox Simulator", "WebSocket error!", errorEvent);
     setConnectionState(false);
+    if (websocket.readyState === 3) {
+      AppLogger.log(
+        "Wallbox Simulator",
+        "The connection was closed or could not be established."
+      );
+    }
   };
 
   websocket.onclose = function () {
-    addLogMessage({
-      source: "CS simulator",
-      payload: "Websocket connection closed.",
-    });
+    AppLogger.log("Wallbox Simulator", "Websocket connection closed.");
     setConnectionState(false);
   };
 
   websocket.onmessage = function (event) {
-    addLogMessage({ source: "CPO backend", payload: event.data });
+    CpoOcppMessageHandler.handleMessage(JSON.parse(event.data));
   };
 
   return websocket;

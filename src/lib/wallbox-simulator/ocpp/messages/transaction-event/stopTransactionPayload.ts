@@ -1,20 +1,19 @@
 import type { TriggerReasonEnumType } from "../../types/triggerReasonEnumType";
-import { ReadingContextEnumType } from "../meterValue";
+import type { TransactionEventRequest } from "../../types/transactionEventRequest";
 
-export function StopTransactionEventPayload(
-  transactionId,
+/**
+ * Builds the payload for an OCPP TransactionEventRequest of type "Ended".
+ *
+ * @param transactionId The OCPP transaction ID
+ * @param stopMeterValueWh The meter value for the end of the charging session
+ * @param triggerReason The reason that triggered this event (default: `EVCommunicationLost`)
+ * @returns The OCPP payload for a TransactionEventRequest of ty "Ended"
+ */
+export function TransactionEventEndedPayload(
+  transactionId: string,
+  stopMeterValueWh: number,
   triggerReason: TriggerReasonEnumType = "EVCommunicationLost"
-) {
-  const lastMeterValueFromSessionStorage =
-    sessionStorage.getItem("LastMeterValue");
-  console.log(
-    `Last meter value from session storage: ${lastMeterValueFromSessionStorage}`
-  );
-
-  const stopMeterValue = parseInt(lastMeterValueFromSessionStorage, 10) ?? 0;
-
-  console.log(`Stop session meter value: ${stopMeterValue}`);
-
+): TransactionEventRequest {
   return {
     eventType: "Ended",
     timestamp: new Date().toISOString(),
@@ -33,7 +32,7 @@ export function StopTransactionEventPayload(
         timestamp: new Date().toISOString(),
         sampledValue: [
           {
-            context: ReadingContextEnumType.TransactionBegin,
+            context: "Transaction.Begin",
             unitOfMeasure: {
               unit: "Wh",
             },
@@ -45,11 +44,11 @@ export function StopTransactionEventPayload(
         timestamp: new Date().toISOString(),
         sampledValue: [
           {
-            context: ReadingContextEnumType.TransactionEnd,
+            context: "Transaction.End",
             unitOfMeasure: {
               unit: "Wh",
             },
-            value: stopMeterValue,
+            value: stopMeterValueWh,
           },
         ],
       },

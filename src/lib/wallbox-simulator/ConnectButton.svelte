@@ -1,28 +1,19 @@
 <script lang="ts">
-  import type { Writable } from 'svelte/store';
+  import { get, Writable } from 'svelte/store';
   
   import Button from '../components/Button.svelte';
-import { startHeartbeat, stopHeartbeat } from './heatbeatTrigger';
+  import { startHeartbeat, stopHeartbeat } from './heatbeatTrigger';
   import type { ConnectionState } from './store';
+  import {webSocket } from './store';
   import { connectStation, disconnectStation } from './websocket';
 
   export let connectionUrl: string = 'not provided';
-  export let webSocket: WebSocket;
   export let connectionState: Writable<ConnectionState>;
     
   let buttonText: string;
-  let errorMessage: string;
 
   const setConnectionState = (connected: boolean) => {
     connected ? $connectionState = 'connected' : $connectionState = 'disconnected';
-  }
-
-  const setErrorMessage = (message: string) => {
-    errorMessage = message;
-  }
-
-  const addLogMessage = (message: string) =>  {
-    console.log(message);
   }
 
   $: {
@@ -44,16 +35,15 @@ import { startHeartbeat, stopHeartbeat } from './heatbeatTrigger';
   const connect = () => {
     if ($connectionState === 'disconnected') {
       $connectionState = 'connecting';
-      webSocket = connectStation(
-        webSocket,
+      webSocket.set(connectStation(
+        get(webSocket),
         connectionUrl,
         setConnectionState,
-        setErrorMessage,
-        addLogMessage
-      );
-      startHeartbeat(webSocket);
+      ));
+      startHeartbeat(get(webSocket));
     } else if ($connectionState === 'connected') {
-      webSocket = disconnectStation(webSocket, setConnectionState);
+      disconnectStation(get(webSocket));
+      setConnectionState(false);
       stopHeartbeat();
     }
   }
