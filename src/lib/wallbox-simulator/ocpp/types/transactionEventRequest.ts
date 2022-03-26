@@ -10,7 +10,7 @@ import type { TriggerReasonEnumType } from "./triggerReasonEnumType";
  * This contains the field definition of the TransactionEventRequest PDU sent by the Charging
  * Station to the CSMS.
  */
-export type TransactionEventRequestType = {
+export type TransactionEventRequest = {
   /**
    * Required. This contains the type of this event. The first TransactionEvent of a transaction
    * SHALL contain: "Started".

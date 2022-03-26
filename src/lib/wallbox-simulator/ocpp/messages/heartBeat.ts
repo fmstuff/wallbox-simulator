@@ -8,5 +8,5 @@ export type HeartBeatRequestPayload = {};
  * This contains the field definition of the HeartbeatRequest PDU sent by the
  * Charging Station to the CSMS. No fields are defined.
  */
-export const HeartbeatRequest =
+export const sendHeartbeatRequest =
   OcppCallMessageBuilder<HeartBeatRequestPayload>("Heartbeat");

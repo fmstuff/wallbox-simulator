@@ -4,27 +4,29 @@
   import ConnectButton from './ConnectButton.svelte'
   import ConnectionState from './ConnectionState.svelte';
   import { connectionState } from './store';
-  import ChargingState from './ChargingState.svelte'
-  import ChargingStateSelector from './ChargingStateSelector.svelte'
-  import PluginCableButton from './PluginCableButton.svelte'
+  import ChargingState from './charging-state/ChargingState.svelte'
+  import ChargingStateSelector from './charging-state/ChargingStateSelector.svelte'
+  import PluginCableButton from './cable/PluginCableButton.svelte'
+  import WallboxSettings from './WallboxSettings.svelte';
 
   export let webSocketUrl = 'wss://connection/string...'
 
-  const connectionStateStore = connectionState;
-  let webSocket: WebSocket;
 </script>
 
 <div class="text-center">
+
+  <div class="max-w-sm m-auto">
+    <WallboxSettings />
+  </div>
+  
   <div class="max-w-sm m-auto">
     <ConnectButton
       bind:connectionUrl={webSocketUrl} 
-      bind:webSocket={webSocket}
-      connectionState={connectionStateStore}
+      connectionState={connectionState}
     />
   </div>
 
   {#if $connectionState === 'connected'}
-  {#if !(webSocket === undefined)}
   <div transition:fade class="flex flex-row gap-3 justify-center">
     <ConnectionState />
     <ChargingState />
@@ -32,13 +34,12 @@
   {/if}
 
   <div class="max-w-sm m-auto">
-    <PluginCableButton bind:webSocket={webSocket} connectionState={connectionStateStore}/>
+    <PluginCableButton connectionState={connectionState}/>
   </div>
 
   <div class="m-auto">
-    <ChargingStateSelector bind:webSocket={webSocket} />
+    <ChargingStateSelector />
   </div>
-  {/if}
 </div>
 
 <style></style>
