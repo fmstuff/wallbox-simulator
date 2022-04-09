@@ -1,7 +1,6 @@
 module.exports = {
   mode: "jit",
-  purge: ["./src/**/*.svelte"],
-  darkMode: false, // or 'media' or 'class'
+  content: ["./src/**/*.svelte"],
   theme: {
     extend: {},
     fontFamily: {
@@ -40,9 +39,6 @@ module.exports = {
         "monospace",
       ],
     },
-  },
-  variants: {
-    extend: {},
   },
   plugins: [require("daisyui")],
 };
