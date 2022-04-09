@@ -1,8 +1,10 @@
 <script lang="ts">
-  import { get, Writable } from "svelte/store";
+  import type { Writable } from "svelte/store";
+  import { get } from "svelte/store";
 
   import Button from "../../components/Button.svelte";
-  import { chargingState, ConnectionState, ocppTransactionId, transactionStartTime, wallboxAuthMode, wallboxMeterWh, webSocket } from "../store";
+  import type { ConnectionState } from "../store";
+  import { chargingState, ocppTransactionId, transactionStartTime, wallboxAuthMode, wallboxMeterWh, webSocket } from "../store";
   import { TransactionEventUpdatePayload } from "../ocpp/messages/transaction-event/updateTransactionPayload";
   import { stopCurrentChargingSession } from "../chargingSessionHandling";
   import { sendTransactionEventRequest } from "../ocpp/messages/transaction-event/transactionEvent";

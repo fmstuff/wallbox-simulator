@@ -7,7 +7,8 @@
   import { startPeriodicMeterIncrement, stopPeriodicMeterIncrement } from '../meterValueTrigger';
   import { sendTransactionEventRequest } from '../ocpp/messages/transaction-event/transactionEvent';
   import { TransactionEventUpdatePayload } from '../ocpp/messages/transaction-event/updateTransactionPayload';
-  import { ChargingStateEnumType, chargingStates } from '../ocpp/types/chargingStateEnumType';
+  import type { ChargingStateEnumType } from '../ocpp/types/chargingStateEnumType';
+  import { chargingStates } from '../ocpp/types/chargingStateEnumType';
   import { chargingState, ocppTransactionId, wallboxMeterWh, wallboxPowerKWh, webSocket } from '../store';
 
   const changeChargingState = (newState: ChargingStateEnumType) => {

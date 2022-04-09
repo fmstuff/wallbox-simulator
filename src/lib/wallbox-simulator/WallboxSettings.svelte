@@ -40,7 +40,7 @@
     </div>
 
     <div class="modal-action">
-      <a href="/#" class="btn btn-primary">Close</a> 
+      <a href="./#" class="btn btn-primary">Close</a> 
     </div>
   </div>
 </div>

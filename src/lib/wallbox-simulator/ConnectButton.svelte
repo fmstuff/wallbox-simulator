@@ -1,5 +1,6 @@
 <script lang="ts">
-  import { get, Writable } from 'svelte/store';
+  import type { Writable } from 'svelte/store';
+  import { get } from 'svelte/store';
   
   import Button from '../components/Button.svelte';
   import { startHeartbeat, stopHeartbeat } from './heatbeatTrigger';
